@@ -98,8 +98,7 @@ pnpm add lodash date-fns
 To add new Python libraries to your virtual environment:
 
 ```bash
-# Example: Add FastAPI or Pandas
-uv add fastapi pandas
+uv add "httpx[socks]"
 ```
 
 ### Common SDK & Service Integrations
