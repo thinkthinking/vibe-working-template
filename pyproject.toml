@@ -4,4 +4,10 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "anthropic>=0.75.0",
+    "google-genai>=1.52.0",
+    "httpx[socks]>=0.28.1",
+    "openai>=2.8.1",
+    "supabase>=2.24.0",
+]

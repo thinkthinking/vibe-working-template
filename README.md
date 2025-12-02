@@ -102,6 +102,50 @@ To add new Python libraries to your virtual environment:
 uv add fastapi pandas
 ```
 
+### Common SDK & Service Integrations
+
+Here are installation commands for commonly used SDKs and services:
+
+#### Supabase (Database & Auth)
+
+```bash
+# Node.js
+pnpm add @supabase/supabase-js
+
+# Python
+uv add supabase
+```
+
+#### OpenAI
+
+```bash
+# Node.js
+pnpm install openai
+
+# Python
+uv add openai
+```
+
+#### Anthropic (Claude)
+
+```bash
+# Node.js
+pnpm install @anthropic-ai/sdk
+
+# Python
+uv add anthropic
+```
+
+#### Google GenAI (Gemini)
+
+```bash
+# Node.js
+pnpm install @google/genai
+
+# Python
+uv add google-genai
+```
+
 ---
 
 ## 📦 Included Features (Pre-configured)
