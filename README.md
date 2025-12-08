@@ -146,56 +146,6 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
    source ~/.zshrc  # or source ~/.bashrc
    ```
 
-#### Quick Test
-
-Verify your setup with a simple API call:
-
-::: code-group
-
-```bash [cURL]
-curl https://zenmux.ai/api/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $ZENMUX_API_KEY" \
-  -d '{
-    "model": "openai/gpt-4o-mini",
-    "messages": [{"role": "user", "content": "Hello!"}]
-  }'
-```
-
-```python [Python]
-from openai import OpenAI
-
-client = OpenAI(
-    base_url="https://zenmux.ai/api/v1",
-    api_key="<your ZENMUX_API_KEY>",
-)
-
-response = client.chat.completions.create(
-    model="openai/gpt-4o-mini",
-    messages=[{"role": "user", "content": "Hello!"}]
-)
-
-print(response.choices[0].message.content)
-```
-
-```typescript [TypeScript]
-import OpenAI from "openai";
-
-const client = new OpenAI({
-  baseURL: "https://zenmux.ai/api/v1",
-  apiKey: "<your ZENMUX_API_KEY>",
-});
-
-const response = await client.chat.completions.create({
-  model: "openai/gpt-4o-mini",
-  messages: [{ role: "user", content: "Hello!" }],
-});
-
-console.log(response.choices[0].message.content);
-```
-
-:::
-
 > **📚 Learn More**: Check out the [ZenMux Documentation](https://docs.zenmux.ai/guide/quickstart.html) for advanced usage, model selection, and API details.
 
 ---
@@ -384,6 +334,7 @@ pnpm install -g @anthropic-ai/claude-code
 ```
 
 **Key Points**:
+
 - Replace `sk-ai-v1-your-zenmux-api-key` with your actual ZenMux API key
 - The `ANTHROPIC_BASE_URL` points to ZenMux's Anthropic-compatible endpoint
 - You can mix models from different providers (OpenAI, Anthropic, Google) in the configuration
@@ -422,6 +373,7 @@ source ~/.zshrc  # or source ~/.bashrc
 ```
 
 **Key Points**:
+
 - Use the same `ZENMUX_API_KEY` you obtained in step 2️⃣
 - The `base_url` points to ZenMux's OpenAI-compatible endpoint
 - You can switch models by changing the `model` value (e.g., `anthropic/claude-sonnet-4.5`)
