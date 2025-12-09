@@ -303,6 +303,53 @@ Manage external repositories for AI context without polluting your source:
 
 Repositories will be cloned/updated in `.context/references/` and auto-added to `.gitignore`.
 
+### 🔄 Template Synchronization
+
+Keep your project up-to-date with the latest template improvements.
+
+**Simple & Fast** (Default):
+
+```bash
+# Directly merge template updates to your current branch
+./scripts/sync-template.sh
+```
+
+This will:
+- ✅ Fetch latest template updates
+- ✅ Show you what will change
+- ✅ Merge directly to your current branch
+- ✅ Guide you through testing
+
+**Safe & Advanced** (With review):
+
+```bash
+# Create a new branch for review before merging
+./scripts/sync-template.sh --branch
+```
+
+This will:
+- ✅ Create a temporary branch for safe merging
+- ✅ Let you test before merging to main
+- ✅ Perfect for team collaboration and PRs
+
+**After syncing:**
+
+```bash
+# Test your application
+pnpm install  # Install new dependencies
+pnpm dev      # Test locally
+pnpm build    # Verify build works
+
+# Push to remote (if everything works)
+git push
+```
+
+**📖 Need detailed guidance?** See the complete [Template Synchronization Guide](./TEMPLATE_SYNC.md) for:
+- Handling merge conflicts
+- Team collaboration workflows
+- Troubleshooting common issues
+- Advanced usage scenarios
+
 ### 🤖 AI Coding Agent Setup
 
 > [!NOTE]
@@ -409,6 +456,8 @@ vibe-working-template/
 | `pnpm lint` | Run ESLint |
 | `uv sync` | Sync Python dependencies |
 | `uv add <package>` | Add Python package |
+| `./scripts/sync-template.sh` | Sync with latest template updates |
+| `./scripts/update-references.sh` | Update reference repositories |
 
 ---
 
