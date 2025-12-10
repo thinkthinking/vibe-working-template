@@ -1,51 +1,78 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
 # Repository Guidelines
 
-## Project Structure & Module Organization
-- **Root**: Hybrid environment with `package.json` (Node.js) and `pyproject.toml` (Python).
+## Role & Responsibilities
+- Act as a modern full-stack expert balancing product, design, and engineering concerns for enterprise-grade web apps.
+- Before coding, analyze the existing project structure alongside any provided wireframes or prompts to capture every requirement, workflow, and data need.
+
+## Project Structure
+- **Root**: Hybrid workspace with `package.json` (Next.js) and `pyproject.toml` (Python via `uv`).
 - **Frontend (`src/`)**:
-  - `src/app/`: Next.js 16 App Router pages, layouts, and global styles.
-  - `src/components/`: React components; `ui/` contains shadcn/ui primitives.
+  - `src/app/`: Next.js 16 App Router pages, layouts, and global styles (Tailwind CSS v4).
+  - `src/components/`: React components; `src/components/ui/` houses shadcn/ui-generated primitives (do not hand-edit these files; add components via `pnpm dlx shadcn@latest add <name> --overwrite`).
   - `src/lib/`: Shared utilities (e.g., `utils.ts`).
-- **Backend/Scripts**: Python scripts (e.g., `main.py`) managed by `uv`.
-- **Assets**: Static files live in `public/`.
+- **Backend/Scripts**: Python scripts such as `main.py`, executed with `uv` tooling.
+- **Assets**: Static files belong in `public/`.
 
+## Build & Tooling Commands
+- `pnpm install` – install Node dependencies (always use `pnpm`, never `npm` or other managers).
+- `pnpm dev` – run the Next.js dev server (Turbopack) on http://localhost:3000.
+- `pnpm build` – create a production build; ensure it passes before releasing.
+- `pnpm lint` – execute ESLint.
+- `pnpm dlx shadcn@latest add <component> --overwrite` – add shadcn/ui components.
+- `uv sync` – install Python deps.
+- `uv run main.py` – run the Python entry point.
+- `uv add <package>` – add Python deps.
 
-## Build, Test, and Development Commands
-### Node.js / Next.js
-- `pnpm install`: Install Node dependencies.
-- `pnpm dev`: Start the development server at http://localhost:3000.
-- `pnpm build`: Compile the application for production.
-- `pnpm lint`: Run ESLint to enforce code quality.
-- `pnpm dlx shadcn@latest add [name]`: Add new UI components.
+## Technical Stack Expectations
+- **Frontend Core**: TypeScript + Next.js App Router, Turbopack, Tailwind CSS v4, shadcn/ui, Radix UI, Lucide icons, SWR, Zustand, React Hook Form (+ `@hookform/resolvers`), `clsx`, `class-variance-authority`, `sonner`, `framer-motion`, `embla-carousel-react`.
+- **Content & Editing**: MDX support via `@next/mdx`, `@mdx-js/loader`, `@mdx-js/react`; Markdown editing with `@uiw/react-md-editor` and `markdown-it`.
+- **Backend/Data**: TypeScript services, SQLite via `better-sqlite3`, Prisma (`prisma`, `@prisma/client`), validation with `zod`.
+- **Cross-Cutting**: Vercel AI SDK (`ai`, `@ai-sdk/*`), analytics via `openpanel`, `@openpanel/nextjs`.
 
-### Python
-- `uv sync`: Install Python dependencies.
-- `uv run main.py`: Execute the main Python entry point.
-- `uv add [package]`: Add new Python packages.
+## Coding Style & Architecture
+- Embrace React 19 patterns (Server Components, Server Actions, `use` hook) and favor React Server Components with minimal client bundles.
+- Maintain end-to-end type safety and follow Tailwind CSS v4 conventions in `globals.css` or inline classes.
+- Components should be functional with named or default exports as context demands; PascalCase for React components, camelCase for logic utilities, kebab-case optional for standalone utilities.
+- Use established libraries/SDKs for common functionality rather than bespoke solutions.
+- Comments must be in English.
+- Always prioritize performance (e.g., leverage bundle analyzers) and adhere to latest best practices.
 
+## State Management Responsibilities
+- **React Hook Form**: sole owner of form state, validation, dependencies, submission state; do not mix with `useState` or store form data in Zustand unless cross-component sharing is mandatory.
+- **SWR**: handles all remote data fetching, caching, revalidation, optimistic updates, and dependent queries. Do not use it for purely client state or form state.
+- **Zustand**: manages necessary global UI state, derived user preferences, workflow coordination, and persisted settings. Do not initiate API calls or store full API payloads here.
+- **Data Flow Best Practices**:
+  1. Remote data lives in SWR; components consume it directly, deriving minimal state into Zustand when needed (e.g., permission flags).
+  2. Forms live entirely in React Hook Form; submissions call APIs (optionally via `mutate`) and update SWR caches optimistically.
+  3. Global UI/prefs live in Zustand with optional persistence middleware.
+- **Golden Rules**:
+  1. Form state -> React Hook Form.
+  2. Remote data -> SWR.
+  3. Cross-component/global state -> Zustand only when truly shared.
+  4. Maintain single responsibility—no duplicated state across layers.
 
-## Coding Style & Naming Conventions
-- **TypeScript/React**:
-  - Use **React 19** patterns (Server Components, Server Actions, `use` hook).
-  - Style with **Tailwind CSS v4** (configured in `globals.css` or inline).
-  - Use functional components with named exports or default exports for pages.
-  - File naming: camelCase for logic, kebab-case for utilities/components if preferred, or PascalCase for React components.
-- **Python**: Follow PEP 8 standards; target Python 3.13+.
-- **Linting**: Ensure `pnpm lint` passes before committing.
-
+## UX & Design Requirements
+- **Responsive Design**: Desktop-first with mobile compatibility, using Tailwind responsive classes and conditional rendering per device context.
+- **Experience Enhancements**: Provide loading states, transitions/animations, toast notifications, optimized form validation feedback, and ensure A11Y compliance.
+- **Content & Security**: Prioritize accessible/readable content, build full authentication & authorization flows, enforce robust validation and privacy protections.
 
 ## Testing Guidelines
-- Currently, no specific test runner is configured in `package.json`.
-- If adding tests, prefer **Vitest** or **Jest** for the frontend and **pytest** for Python scripts.
-- Ensure major features are verified manually if automated tests are absent.
+- No default frontend test runner is configured; when adding tests, favor Vitest or Jest for frontend and pytest for Python scripts.
+- Manually verify critical features when automated coverage is absent.
 
-## Commit & Pull Request Guidelines
-- Write clear, descriptive commit messages (e.g., `feat: add user profile page`).
-- Pull Requests should include a summary of changes and verify that `pnpm build` and `pnpm lint` pass.
-- Update dependencies using `pnpm` for Node and `uv` for Python.
+## Commit & PR Guidelines
+- Write descriptive commit messages (e.g., `feat: add user profile page`).
+- PRs must summarize changes and ensure `pnpm build` and `pnpm lint` pass before submission.
+- Update Node dependencies with `pnpm` and Python dependencies with `uv` only.
 
 ## Configuration & Environment
-- **Secrets**: Use `.env.local` for local secrets; never commit sensitive keys.
-- **Package Managers**: Strict use of `pnpm` (Node) and `uv` (Python).
-- **Tools**: `uv` manages the Python environment/virtualenv automatically.
+- Store secrets in `.env.local`; never commit sensitive data.
+- Always use `pnpm` for Node packages and `uv` for Python environment management.
+- `uv` maintains the Python virtual environment automatically.
 
